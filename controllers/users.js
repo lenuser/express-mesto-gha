@@ -1,5 +1,5 @@
 const User = require('../models/user');
-//добавление пользователя
+
 module.exports.addUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
