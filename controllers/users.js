@@ -12,28 +12,12 @@ module.exports.addUser = (req, res) => {
       }
     });
 };
-//
+
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
-
-// module.exports.getUsers = (req, res) => {
-//   if (req.params.userId.length === 24) {
-//     User.findById(req.params.userId)
-//       .then((user) => {
-//         if (!user) {
-//           res.status(404).send({ message: 'Пользователь по указанному Id не найден' });
-//           return;
-//         }
-//         res.send(user);
-//       })
-//       .catch(() => res.status(404).send({ message: 'Пользователь по указанному Id не найден' }));
-//   } else {
-//     res.status(400).send({ message: 'Некорректный Id' });
-//   }
-// };
 
 module.exports.getUserById = (req, res) => {
   if (req.params.userId.length === 24) {

@@ -7,7 +7,7 @@ module.exports.addCard = (req, res) => {
       Card.findById(card._id)
         .populate('owner')
         .then((data) => res.status(201).send(data))
-        .catch(() => res.status(400).send({ message: 'Карточка с указанным id не найдена' }));
+        .catch(() => res.status(404).send({ message: 'Карточка с указанным id не найдена' }));
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
