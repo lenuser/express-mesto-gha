@@ -7,7 +7,7 @@ module.exports.addCard = (req, res) => {
       Card.findById(card._id)
         .populate('owner')
         .then((data) => res.status(201).send(data))
-        .catch(() => res.status(404).send({ message: 'Карточка с указанным id не найдена' }));
+        .catch(() => res.status(404).send({ message: 'Карточка с указанным _id не найдена' }));
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -20,7 +20,7 @@ module.exports.addCard = (req, res) => {
 module.exports.getCards = (req, res) => {
   Card.find({})
     .populate(['owner', 'likes'])
-    .then((cards) => res.send(cards))
+    .then((cards) => res.status(201).send(cards))
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
@@ -29,14 +29,14 @@ module.exports.deleteCard = (req, res) => {
     Card.findByIdAndRemove(req.params.cardId)
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'Карточка с указанным id не найдена' });
+          res.status(404).send({ message: 'Карточка с указанным _id не найдена' });
           return;
         }
         res.send({ message: 'Карточка удалена' });
       })
-      .catch(() => res.status(404).send({ message: 'Карточка с указанным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Карточка с указанным _id не найдена' }));
   } else {
-    res.status(400).send({ message: 'Не верный id' });
+    res.status(400).send({ message: 'Не верный _id' });
   }
 };
 
@@ -63,13 +63,13 @@ module.exports.dislikeCard = (req, res) => {
       .populate(['owner', 'likes'])
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'Карточка с указанным id не найдена' });
+          res.status(404).send({ message: 'Карточка с указанным _id не найдена' });
           return;
         }
         res.send(card);
       })
-      .catch(() => res.status(404).send({ message: 'Карточка с указанным id не найдена' }));
+      .catch(() => res.status(404).send({ message: 'Карточка с указанным _id не найдена' }));
   } else {
-    res.status(400).send({ message: 'Не верный id карточки' });
+    res.status(400).send({ message: 'Не верный _id карточки' });
   }
 };
