@@ -6,7 +6,7 @@ module.exports.addCard = (req, res) => {
     .then((card) => {
       Card.findById(card._id)
         .populate('owner')
-        .then((data) => res.status(201).send(data))
+        .then((data) => res.send(data))
         .catch(() => res.status(404).send({ message: 'Карточка с указанным _id не найдена' }));
     })
     .catch((err) => {
@@ -20,7 +20,7 @@ module.exports.addCard = (req, res) => {
 module.exports.getCards = (req, res) => {
   Card.find({})
     .populate(['owner', 'likes'])
-    .then((cards) => res.status(201).send(cards))
+    .then((cards) => res.send(cards))
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
