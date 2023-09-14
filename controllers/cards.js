@@ -1,5 +1,5 @@
-const Card = require('../models/card');
 const { ObjectId } = require('mongoose').Types;
+const Card = require('../models/card');
 
 module.exports.addCard = (req, res) => {
   const { name, link } = req.body;
@@ -26,7 +26,7 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  if  (ObjectId.isValid(req.params.cardId)) {
+  if (ObjectId.isValid(req.params.cardId)) {
     Card.findByIdAndRemove(req.params.cardId)
       .then((card) => {
         if (!card) {
