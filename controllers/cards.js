@@ -16,8 +16,8 @@ module.exports.addCard = (req, res) => {
 
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .populate(['owner', 'likes'])
-    .then((cards) => res.send({ data: cards }))
+    .populate('owner')
+    .then((card) => res.send({ data: card }))
     .catch((err) => errorHandler(err, res, {
       ...defaultErrorMessages,
       [NotFoundError]: 'Карточка, с указанным id, не найдена',
@@ -37,7 +37,7 @@ module.exports.deleteCard = (req, res) => {
     .catch((err) => errorHandler(err, res, {
       ...defaultErrorMessages,
       [NotFoundError]: 'Карточка, с указанным id, не найдена',
-      [InternalServerError]: 'На сервере произошла ошибка',
+      [InternalServerError]: 'На сервере произошла ошибка при удалении карточки',
     }));
 };
 
