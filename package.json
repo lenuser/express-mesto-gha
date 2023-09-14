@@ -22,5 +22,8 @@
   },
   "keywords": [],
   "author": "lis",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lenuser/express-mesto-gha.git"
+    }
 }
