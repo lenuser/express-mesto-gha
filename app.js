@@ -16,8 +16,9 @@ mongoose.connect(DB_URL, {
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '6501f4b71e1c902452c1dbf',
+    _id: '6501f4b71e1c902452c1dbf3' // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
+
   next();
 });
 
