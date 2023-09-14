@@ -4,7 +4,7 @@ const {
 
 const defaultErrorMessages = {
   [CastError]: 'Неверный id',
-  [ValidationError]: 'Переданы некорректные данные',
+  [ValidationError]: 'Неверные данные',
 };
 
 const errorHandler = (err, res, errorMessage) => {
