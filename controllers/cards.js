@@ -6,7 +6,7 @@ const { defaultErrorMessages } = require('./errorHandler');
 module.exports.addCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.send({ data: card }))
+    .then((cards) => res.send({ data: cards }))
     .catch((err) => errorHandler(err, res, {
       ...defaultErrorMessages,
       [NotFoundError]: 'Карточка, с указанным id, не найдена',
