@@ -6,7 +6,7 @@ const { defaultErrorMessages } = require('./errorHandler');
 module.exports.addCard = (req, res) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((cards) => res.send({ data: cards }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => errorHandler(err, res, {
       ...defaultErrorMessages,
       [NotFoundError]: 'Карточка, с указанным id, не найдена',
@@ -47,7 +47,6 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         res.status(NotFound).send({ message: 'Карточка, с указанным id, не найдена' });
@@ -68,7 +67,6 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         res.status(NotFound).send({ message: 'Карточка, с указанным id, не найдена' });
