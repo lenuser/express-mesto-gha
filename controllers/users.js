@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongoose').Types;
 const User = require('../models/user');
 
 module.exports.addUser = (req, res) => {
@@ -20,7 +21,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserById = (req, res) => {
-  if (req.params.userId) {
+  if (ObjectId.isValid(req.params.cardId)) {
     User.findById(req.params.userId)
       .then((user) => {
         if (!user) {
@@ -29,15 +30,10 @@ module.exports.getUserById = (req, res) => {
         }
         res.send(user);
       })
-      .catch((err) => {
-        if (err.name === 'CastError') {
-          res.status(404).send({ message: 'Пользователь по указанному Id не найден' });
-        } else {
-          res.status(400).send({ message: 'Некорректный Id' });
-        }
-      });
-  }
-};
+      .catch(() => res.status(404).send({ message: 'Пользователь по указанному Id не найден' }))
+  } else {
+    res.status(400).send({ message: 'Некорректный Id' });}
+  };
 
 module.exports.editUserData = (req, res) => {
   const { name, about } = req.body;
