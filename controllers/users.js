@@ -21,7 +21,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserById = (req, res) => {
-  if (ObjectId.isValid(req.params.cardId)) {
+  if (ObjectId.isValid(req.params.userId)) {
     User.findById(req.params.userId)
       .then((user) => {
         if (!user) {
