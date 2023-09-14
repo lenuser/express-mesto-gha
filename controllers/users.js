@@ -31,13 +31,13 @@ module.exports.getUserById = (req, res) => {
       })
       .catch((err) => {
         if (err.name === 'CastError') {
-          res.status(404).send({ message: 'Пользователь по указанному Id не найден' });
-        } else {
-          res.status(400).send({ message: 'Некорректный Id' });
-        }
-      });
+        res.status(404).send({ message: 'Пользователь по указанному Id не найден' });
+  } else {
+    res.status(400).send({ message: 'Некорректный Id' });
   }
-};
+  })
+}
+    };
 
 module.exports.editUserData = (req, res) => {
   const { name, about } = req.body;
