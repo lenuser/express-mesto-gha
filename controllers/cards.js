@@ -1,5 +1,7 @@
-const { ObjectId } = require('mongoose').Types;
 const Card = require('../models/card');
+const { errorHandler } = require('./errorHandler');
+const {NotFound, NotFoundError, InternalServerError,} = require('./errorCodes');
+const { defaultErrorMessages } = require('./errorHandler');
 
 module.exports.addCard = (req, res) => {
   const { name, link } = req.body;
@@ -22,23 +24,25 @@ module.exports.getCards = (req, res) => {
   Card.find({})
     .populate(['owner', 'likes'])
     .then((cards) => res.send(cards))
-    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
+    .catch((err) => errorHandler(err, res, {
+      ...defaultErrorMessages,
+      [NotFoundError]: 'Карточка, с указанным id, не найдена',
+      [InternalServerError]: 'На сервере произошла ошибка',
+      }));
 };
 
 module.exports.deleteCard = (req, res) => {
-  if (ObjectId.isValid(req.params.cardId)) {
     Card.findByIdAndRemove(req.params.cardId)
       .then((card) => {
         if (!card) {
-          res.status(404).send({ message: 'Карточка, с указанным id, не найдена' });
+          res.status(NotFound).send({ message: 'Карточка, с указанным id, не найдена' });
           return;
         }
         res.send({ message: 'Карточка удалена' });
       })
-      .catch(() => res.status(404).send({ message: 'Карточка, с указанным id, не найдена' }));
+      .catch(() => res.status(NotFound).send({ message: 'Карточка, с указанным id, не найдена' }));
   } else {
-    res.status(400).send({ message: 'Неверный id' });
-  }
+    res.status(BadRequest).send({ message: 'Неверный id' });
 };
 
 module.exports.likeCard = (req, res) => {
