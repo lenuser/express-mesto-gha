@@ -10,6 +10,12 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: [true, 'Поле "link" должно быть заполнено'],
+    validate: {
+      validator(v) {
+        return /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(v);
+      },
+      message: 'Ошибка URL',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -18,7 +24,7 @@ const cardSchema = new mongoose.Schema({
   },
   likes: [
     {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
       default: [],
     },
@@ -27,5 +33,5 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, { versionKey: false });
 module.exports = mongoose.model('card', cardSchema);
