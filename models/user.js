@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    required: [true, 'Поледолжно быть заполнено'],
+    required: [true, 'Поле должно быть заполнено'],
     minlength: [2, 'Минимальная длина поля — 2 символа'],
     maxlength: [30, 'Максимальная длина поля — 30 символов'],
     default: 'Исследователь',
@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поледолжно быть заполнено'],
     validate: {
-      validator(url) {
-        return /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(url);
+      validator(v) {
+        return /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(v);
       },
       message: (props) => `${props.value} некорректная ссылка!`,
     },

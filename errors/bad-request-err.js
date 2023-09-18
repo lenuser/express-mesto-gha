@@ -1,6 +1,4 @@
-const {
-  BadRequestErrorCode,
-} = require('./errorCodes');
+const { BadRequestErrorCode } = require('./errorCodes');
 
 class BadRequestError extends Error {
   constructor(message) {

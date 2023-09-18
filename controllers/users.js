@@ -5,7 +5,30 @@ const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
 
-module.exports.addUser = (req, res, next) => {
+const getUserById = (req, res, next) => {
+  User.findById(req.params.userId)
+    .then((user) => {
+      if (user) res.status(200).send({ data: user });
+      else {
+        throw new NotFoundError('Нет пользователя с таким id');
+      }
+    })
+    .catch(next);
+};
+
+const getUsers = (req, res, next) => {
+  User.find({})
+    .then((user) => res.send({ data: user }))
+    .catch(next);
+};
+
+const getUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => res.send({ data: user }))
+    .catch(next);
+};
+
+const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -16,7 +39,7 @@ module.exports.addUser = (req, res, next) => {
       about,
       avatar,
       email,
-      password: hash,
+      password: hash, // записываем хеш в базу
     }))
     .then((user) => res.send({ data: { user } }))
     .catch((error) => {
@@ -27,30 +50,7 @@ module.exports.addUser = (req, res, next) => {
     });
 };
 
-module.exports.getUser = (req, res, next) => {
-  User.findById(req.user._id)
-    .then((user) => res.send({ data: user }))
-    .catch(next);
-};
-
-module.exports.getUsers = (req, res, next) => {
-  User.find({})
-    .then((user) => res.send({ data: user }))
-    .catch(next);
-};
-
-module.exports.getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
-    .then((user) => {
-      if (user) res.status(200).send({ data: user });
-      else {
-        throw new NotFoundError('Пользователь по указанному Id не найден');
-      }
-    })
-    .catch(next);
-};
-
-module.exports.editUserData = (req, res, next) => {
+const updateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, {
     name: req.body.name, about: req.body.about,
   }, { new: true, runValidators: true })
@@ -58,7 +58,7 @@ module.exports.editUserData = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.editUserAvatar = (req, res, next) => {
+const updateAvatar = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, {
     avatar: req.body.avatar,
   }, { new: true, runValidators: true })
@@ -66,20 +66,20 @@ module.exports.editUserAvatar = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.login = (req, res, next) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   User.findOne({ email })
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new BadRequestError('Неверные пароль/почта');
+        throw new BadRequestError('Неправильные почта или пароль');
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new BadRequestError('Неверные пароль/почта');
+            throw new BadRequestError('Неправильные почта или пароль');
           }
 
           return user;
@@ -92,3 +92,8 @@ module.exports.login = (req, res, next) => {
     })
     .catch(next);
 };
+
+module.exports = {
+  getUserById, getUsers, createUser, updateUser, updateAvatar, login, getUser,
+};
+
