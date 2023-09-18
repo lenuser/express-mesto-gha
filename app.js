@@ -16,14 +16,6 @@ mongoose.connect(DB_URL, {
   useNewUrlParser: true,
 });
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '650350181fb6601a8e80b01d',
-  };
-
-  next();
-});
-
 app.post('/signin', login);
 app.post('/signup', createUser);
 

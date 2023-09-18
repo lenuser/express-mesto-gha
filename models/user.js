@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false, // необходимо добавить поле select
+    select: false,
   },
 });
 
