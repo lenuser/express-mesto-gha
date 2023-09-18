@@ -8,7 +8,7 @@ router.get('/', getUsers);
 router.get('/:userId', getUserById);
 router.post('/', addUser);
 router.patch('/me', editUserData);
-router.patch('/me/avatar',celebrate ({
+router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().required().uri(),
   }),

@@ -26,21 +26,21 @@ const userSchema = new mongoose.Schema({
       message: (props) => `${props.value} некорректная ссылка!`,
     },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-    },
-    email: {
-      type: String,
-      unique: true,
-      validate: {
-        validator(email) {
-          return validator.isEmail(email);
-        },
-        message: (props) => `${props.value} некорректный e-mail`,
+  },
+  email: {
+    type: String,
+    unique: true,
+    validate: {
+      validator(email) {
+        return validator.isEmail(email);
       },
+      message: (props) => `${props.value} некорректный e-mail`,
     },
-    password: {
-      type: String,
-      required: true,
-      select: false,
-    },
+  },
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
 }, { versionKey: false });
 module.exports = mongoose.model('user', userSchema);
