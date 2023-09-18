@@ -96,4 +96,3 @@ const login = (req, res, next) => {
 module.exports = {
   getUserById, getUsers, createUser, updateUser, updateAvatar, login, getUser,
 };
-
