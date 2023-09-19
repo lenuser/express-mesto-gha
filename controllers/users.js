@@ -4,30 +4,38 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
+const { default: mongoose } = require('mongoose');
+const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
 
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
+  .orFail()
     .then((user) => {
-      if (user) res.status(200).send({ data: user });
-      else {
-        throw new NotFoundError('Нет пользователя с таким id');
-      }
+      res.status(HTTP_STATUS_OK).send(user)
     })
-    .catch(next);
+    .catch((err) => {
+    if (err instanceof mongoose.Error.CastError){
+      next(new BadRequestError(`Не верный id: ${req.params.userId}`));
+    } else if (err instanceof mongoose.Error.DocumentNotFoundError){
+      next(new NotFoundError(`Пользователь по данному id: ${req.params.userId} не найден`));
+    } else {
+      next(err);
+    }
+  });
 };
 
-const getUsers = (req, res, next) => {
+const getUsers = (req, res) => {
   User.find({})
-    .then((user) => res.send({ data: user }))
+    .then((users) => res.status(HTTP_STATUS_OK).send(users))
     .catch(next);
 };
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch(next);
 };
-
+//addUser
 const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
@@ -40,14 +48,19 @@ const createUser = (req, res, next) => {
       avatar,
       email,
       password: hash, // записываем хеш в базу
+    })
+    .then((user) => res.status(HTTP_STATUS_CREATED).send({
+      name:user.name, about: user.about, avatar: user.avatar, _id: user._id, email: user.email,
     }))
-    .then((user) => res.send({ data: { user } }))
     .catch((error) => {
       if (error.code === 11000) {
-        throw new ConflictError('Такой email уже существует');
-      }
+        next(new ConflictError(`пользователь с email: ${email} уже существует`));
+      } else if (error instanceof mongoose.Error.ValidationError){
+        next( new BadRequestError(err.message));
+      } else {
       next(error);
-    });
+    }
+    }));
 };
 
 const updateUser = (req, res, next) => {
@@ -69,28 +82,14 @@ const updateAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findOne({ email })
-    .select('+password')
+  return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        throw new BadRequestError('Неправильные почта или пароль');
-      }
-
-      return bcrypt.compare(password, user.password)
-        .then((matched) => {
-          if (!matched) {
-            throw new BadRequestError('Неправильные почта или пароль');
-          }
-
-          return user;
-        });
-    })
-    .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '10d' });
-
+      const token = jwt.sign({ _id: user._id }, 'mesto-key', { expiresIn: '10d'});
       res.send({ token });
     })
-    .catch(next);
+    .catch((err) => {
+     next(err)
+    });
 };
 
 module.exports = {

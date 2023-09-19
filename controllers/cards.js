@@ -1,7 +1,7 @@
 const Card = require('../models/card');
-const { errorHandler } = require('../errors/errorHandler');
-const { NotFound, NotFoundError, InternalServerError } = require('../errors/errorCodes');
-const { defaultErrorMessages } = require('../errors/errorHandler');
+const { errorHandler } = require('../errors/forbidden');
+const { NotFound, NotFoundError, InternalServerError } = require('../errors/unauthorized');
+const { defaultErrorMessages } = require('../errors/forbidden');
 
 module.exports.addCard = (req, res) => {
   const { name, link } = req.body;
