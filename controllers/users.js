@@ -48,13 +48,13 @@ module.exports.createUser = (req, res, next) => {
       .then((user) => res.status(HTTP_STATUS_CREATED).send({
         name: user.name, about: user.about, avatar: user.avatar, _id: user._id, email: user.email,
       }))
-      .catch((error) => {
-        if (error.code === 11000) {
+      .catch((err) => {
+        if (err.code === 11000) {
           next(new ConflictError(`Пользователь с email: ${email} уже существует`));
-        } else if (error instanceof mongoose.Error.ValidationError) {
-          next(new BadRequestError(error.message));
+        } else if (err instanceof mongoose.Error.ValidationError) {
+          next(new BadRequestError(err.message));
         } else {
-          next(error);
+          next(err);
         }
       }));
 };
