@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose').default;
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
@@ -9,6 +9,7 @@ const router = require('./routes/index');
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
 const app = express();
+
 const limiter = ratelimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -30,17 +31,12 @@ app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
-  res
-    .status(statusCode)
-    .send({
-
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'На сервере произошла ошибка'
+      : message,
+  });
   next();
 });
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+app.listen(PORT);

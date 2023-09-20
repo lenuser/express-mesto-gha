@@ -35,7 +35,7 @@ module.exports.getUser = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch(next);
 };
-// addUser
+
 module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
