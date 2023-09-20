@@ -7,10 +7,11 @@ const signin = require('./signin');
 const NotFoundError = require('../errors/not-found-err');
 
 router
-  .use('/users', auth, users)
-  .use('/cards', auth, cards)
-  .use('/signup', auth, signup)
-  .use('/signin', auth, signin)
+  .use('/users', users)
+  .use('/cards', cards)
+  .use('/signup', signup)
+  .use('/signin', signin)
+  .use(auth)
 
   .use('*', (req, res, next) => {
     next(new NotFoundError('Страница не найдена'));
