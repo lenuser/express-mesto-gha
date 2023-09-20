@@ -1,5 +1,5 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 const Card = require('../models/card');
 const BadRequestError = require('../errors/bad-request-err');
 const NotFoundError = require('../errors/not-found-err');

@@ -1,7 +1,7 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
