@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const urlRegex = require('../constants/constants');
 const Unauthorized = require('../errors/unauthorized');
@@ -32,8 +31,8 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator(email) {
-        //validator.isEmail(email);
-        return  /^\S+@\S+\.\S+$/.test(email);
+        // validator.isEmail(email);
+        return /^\S+@\S+\.\S+$/.test(email);
       },
       message: 'Некорректный e-mail',
     },
