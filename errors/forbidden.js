@@ -1,10 +1,8 @@
 const { HTTP_STATUS_FORBIDDEN } = require('http2').constants;
 
-class Forbidden extends Error {
+module.exports = class Forbidden extends Error {
   constructor(message) {
     super(message);
     this.statusCode = HTTP_STATUS_FORBIDDEN;
   }
-}
-
-module.exports = Forbidden;
+};
