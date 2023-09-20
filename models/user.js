@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
       validator(v) {
         return urlRegex.test(v);
       },
-      message: `Некорректная ссылка!`,
+      message: 'Некорректная ссылка!',
     },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
       validator(email) {
         return validator.isEmail(email);
       },
-      message: `Некорректный e-mail`,
+      message: 'Некорректный e-mail',
     },
   },
   password: {
